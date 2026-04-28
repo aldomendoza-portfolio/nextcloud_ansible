@@ -74,6 +74,7 @@ services:
       - ./nextcloud:/var/www/html
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.http.routers.nextcloud.rule=Host(`${DOMAIN}`)"
       - "traefik.http.routers.nextcloud.entrypoints=websecure"
       - "traefik.http.routers.nextcloud.tls.certresolver=myresolver"
@@ -114,6 +115,7 @@ services:
       - JWT_HEADER=Authorization
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.http.routers.onlyoffice.rule=Host(`office.asesoresti.site`)"
       - "traefik.http.routers.onlyoffice.entrypoints=websecure"
       - "traefik.http.routers.onlyoffice.tls.certresolver=myresolver"
