@@ -52,6 +52,9 @@ services:
     image: nextcloud:latest
     container_name: nextcloud_app
     restart: always
+    extra_hosts:
+      - "${DOMAIN}:host-gateway"
+      - "office.asesoresti.site:host-gateway"
     depends_on:
       - db
       - redis
@@ -65,7 +68,7 @@ services:
       - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
       - NEXTCLOUD_TRUSTED_DOMAINS=${DOMAIN}
-      - TRUSTED_PROXIES=traefik
+      - TRUSTED_PROXIES=10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
       - OVERWRITEPROTOCOL=https
       - OVERWRITECLIURL=https://${DOMAIN}
       - OVERWRITEHOST=${DOMAIN}
@@ -110,6 +113,9 @@ services:
     image: onlyoffice/documentserver:latest
     container_name: onlyoffice
     restart: always
+    extra_hosts:
+      - "${DOMAIN}:host-gateway"
+      - "office.asesoresti.site:host-gateway"
     environment:
       - JWT_SECRET=${ONLYOFFICE_JWT_SECRET}
       - JWT_HEADER=Authorization

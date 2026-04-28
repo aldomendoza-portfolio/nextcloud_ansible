@@ -16,8 +16,15 @@
     - "{{ nextcloud_base_dir }}/nextcloud"
     - "{{ nextcloud_data_dir }}"
     - "{{ nextcloud_db_dir }}"
-    - "{{ nextcloud_base_dir }}/redis"
     - "{{ nextcloud_base_dir }}/traefik"
+
+- name: Crear directorio para Redis con permisos correctos
+  file:
+    path: "{{ nextcloud_base_dir }}/redis"
+    state: directory
+    mode: '0755'
+    owner: "999" # Usuario redis en la imagen oficial
+    group: "999"
 
 - name: Crear archivo de configuración de Traefik vacío (acme.json)
   file:
