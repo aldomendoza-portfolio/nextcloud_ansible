@@ -1,0 +1,22 @@
+---
+# Configuración del Servidor y Dominio
+server_ip: 74.208.32.232
+domain: nextcloud.asesoresti.site
+le_email: amendoza@asesoresti.site
+
+# Configuración del Usuario
+new_user: amendoza
+ssh_key_path: "./ssh_keys/{{ new_user }}_ed25519"
+
+# Configuración de Nextcloud y Docker
+nextcloud_base_dir: /opt/nextcloud
+nextcloud_data_dir: "{{ nextcloud_base_dir }}/data"
+nextcloud_db_dir: "{{ nextcloud_base_dir }}/db"
+
+# Contraseñas (En producción se recomienda usar ansible-vault para esto)
+db_password: "NextcloudDB_Secr3tPassword!"
+redis_password: "NextcloudRedis_Secr3tPassword!"
+nextcloud_admin_user: "admin"
+nextcloud_admin_password: "NextcloudAdmin_Secr3tPassword!"
+onlyoffice_jwt_secret: "OnlyOffice_Secr3tJWT!"
+turn_secret: "Coturn_Secr3tPassword!"

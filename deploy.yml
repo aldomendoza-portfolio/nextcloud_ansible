@@ -1,0 +1,18 @@
+---
+- hosts: nextcloud_servers
+  become: yes
+  
+  pre_tasks:
+    - name: Asegurar que Python 3 y utilidades están instalados
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3 python3-pip)
+      changed_when: false
+
+  roles:
+    - role: system
+      tags: ['system']
+      
+    - role: docker
+      tags: ['docker']
+      
+    - role: nextcloud
+      tags: ['nextcloud']

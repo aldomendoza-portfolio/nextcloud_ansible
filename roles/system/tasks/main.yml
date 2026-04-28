@@ -1,0 +1,65 @@
+---
+- name: Preparar entorno local para llaves SSH
+  delegate_to: localhost
+  become: false
+  file:
+    path: "{{ ssh_key_path | dirname }}"
+    state: directory
+    mode: '0700'
+
+- name: Generar llave SSH localmente si no existe
+  delegate_to: localhost
+  become: false
+  community.crypto.openssh_keypair:
+    path: "{{ ssh_key_path }}"
+    type: ed25519
+    state: present
+  register: ssh_key_result
+
+- name: Mostrar ruta de la llave privada
+  debug:
+    msg: "La llave privada se ha generado en: {{ ssh_key_path }}. Cópiala a tu equipo para acceder al servidor."
+  when: ssh_key_result is defined
+
+- name: Asegurar grupo sudo
+  group:
+    name: sudo
+    state: present
+
+- name: Crear usuario normal y agregarlo a sudo
+  user:
+    name: "{{ new_user }}"
+    state: present
+    groups: sudo
+    append: yes
+    shell: /bin/bash
+    create_home: yes
+
+- name: Configurar sudo sin contraseña para el usuario
+  copy:
+    dest: "/etc/sudoers.d/{{ new_user }}"
+    content: "{{ new_user }} ALL=(ALL) NOPASSWD: ALL"
+    validate: /usr/sbin/visudo -cf %s
+    mode: '0440'
+
+- name: Agregar llave publica al usuario autorizado
+  authorized_key:
+    user: "{{ new_user }}"
+    state: present
+    key: "{{ lookup('file', ssh_key_path ~ '.pub') }}"
+
+- name: Deshabilitar acceso root por SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+  notify: restart ssh
+
+- name: Deshabilitar autenticación por contraseña por SSH
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
+  notify: restart ssh

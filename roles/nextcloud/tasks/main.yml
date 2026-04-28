@@ -1,0 +1,44 @@
+---
+- name: Crear red externa en Docker para Traefik si no existe
+  community.docker.docker_network:
+    name: web
+    state: present
+
+- name: Crear directorios base para Nextcloud
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+    owner: "33" # Usuario www-data
+    group: "33"
+  with_items:
+    - "{{ nextcloud_base_dir }}"
+    - "{{ nextcloud_base_dir }}/nextcloud"
+    - "{{ nextcloud_data_dir }}"
+    - "{{ nextcloud_db_dir }}"
+    - "{{ nextcloud_base_dir }}/redis"
+    - "{{ nextcloud_base_dir }}/traefik"
+
+- name: Crear archivo de configuración de Traefik vacío (acme.json)
+  file:
+    path: "{{ nextcloud_base_dir }}/traefik/acme.json"
+    state: touch
+    mode: '0600'
+  changed_when: false
+
+- name: Copiar archivo .env para docker-compose
+  template:
+    src: .env.j2
+    dest: "{{ nextcloud_base_dir }}/.env"
+    mode: '0600'
+
+- name: Copiar docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ nextcloud_base_dir }}/docker-compose.yml"
+
+- name: Levantar stack de Nextcloud con Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: "{{ nextcloud_base_dir }}"
+    state: present
+    pull: always
