@@ -67,7 +67,7 @@ services:
       - REDIS_HOST_PASSWORD=${REDIS_PASSWORD}
       - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN_USER}
       - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_ADMIN_PASSWORD}
-      - NEXTCLOUD_TRUSTED_DOMAINS=${DOMAIN}
+      - NEXTCLOUD_TRUSTED_DOMAINS=${DOMAIN} nextcloud_app
       - TRUSTED_PROXIES=10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
       - OVERWRITEPROTOCOL=https
       - OVERWRITECLIURL=https://${DOMAIN}
@@ -117,14 +117,16 @@ services:
       - "${DOMAIN}:host-gateway"
       - "office.asesoresti.site:host-gateway"
     environment:
-      - JWT_SECRET=${ONLYOFFICE_JWT_SECRET}
-      - JWT_HEADER=Authorization
+      - JWT_ENABLED=false
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
       - "traefik.http.routers.onlyoffice.rule=Host(`office.asesoresti.site`)"
       - "traefik.http.routers.onlyoffice.entrypoints=websecure"
       - "traefik.http.routers.onlyoffice.tls.certresolver=myresolver"
+      - "traefik.http.routers.onlyoffice.middlewares=onlyoffice-headers"
+      - "traefik.http.middlewares.onlyoffice-headers.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.onlyoffice-headers.headers.customResponseHeaders.Content-Security-Policy=upgrade-insecure-requests"
     networks:
       - web
       - nextcloud_net
