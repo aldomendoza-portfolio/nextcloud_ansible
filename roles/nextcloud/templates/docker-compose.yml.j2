@@ -96,7 +96,7 @@ services:
       - nextcloud_net
 
   cron:
-    image: nextcloud:latest
+    image: nextcloud:33.0.3
     container_name: nextcloud_cron
     restart: always
     depends_on:
