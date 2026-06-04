@@ -2,11 +2,12 @@
 # Configuración del Servidor y Dominio
 server_ip: 74.208.32.232
 domain: nextcloud.asesoresti.site
+onlyoffice_domain: office.asesoresti.site
 le_email: amendoza@asesoresti.site
 
 # Configuración del Usuario
 new_user: amendoza
-ssh_key_path: "./ssh_keys/{{ new_user }}_ed25519"
+ssh_key_path: "./ssh_keys/amendoza_ed25519"
 
 # Configuración de Nextcloud y Docker
 nextcloud_base_dir: /opt/nextcloud

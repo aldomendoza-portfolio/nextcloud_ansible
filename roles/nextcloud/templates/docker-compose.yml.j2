@@ -49,12 +49,15 @@ services:
       - nextcloud_net
 
   app:
-    image: nextcloud:33.0.3
+    build:
+      context: ./nextcloud_build
+      dockerfile: Dockerfile
+    image: nextcloud-ocr:33.0.3
     container_name: nextcloud_app
     restart: always
     extra_hosts:
       - "${DOMAIN}:host-gateway"
-      - "office.asesoresti.site:host-gateway"
+      - "${ONLYOFFICE_DOMAIN}:host-gateway"
     depends_on:
       - db
       - redis
@@ -96,7 +99,10 @@ services:
       - nextcloud_net
 
   cron:
-    image: nextcloud:33.0.3
+    build:
+      context: ./nextcloud_build
+      dockerfile: Dockerfile
+    image: nextcloud-ocr:33.0.3
     container_name: nextcloud_cron
     restart: always
     depends_on:
@@ -115,13 +121,13 @@ services:
     restart: always
     extra_hosts:
       - "${DOMAIN}:host-gateway"
-      - "office.asesoresti.site:host-gateway"
+      - "${ONLYOFFICE_DOMAIN}:host-gateway"
     environment:
       - JWT_ENABLED=false
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
-      - "traefik.http.routers.onlyoffice.rule=Host(`office.asesoresti.site`)"
+      - "traefik.http.routers.onlyoffice.rule=Host(`${ONLYOFFICE_DOMAIN}`)"
       - "traefik.http.routers.onlyoffice.entrypoints=websecure"
       - "traefik.http.routers.onlyoffice.tls.certresolver=myresolver"
       - "traefik.http.routers.onlyoffice.middlewares=onlyoffice-headers"
