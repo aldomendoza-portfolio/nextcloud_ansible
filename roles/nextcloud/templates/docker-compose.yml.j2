@@ -49,10 +49,7 @@ services:
       - nextcloud_net
 
   app:
-    build:
-      context: ./nextcloud_build
-      dockerfile: Dockerfile
-    image: nextcloud-ocr:33.0.3
+    image: nextcloud:33.0.3
     container_name: nextcloud_app
     restart: always
     extra_hosts:
@@ -99,10 +96,7 @@ services:
       - nextcloud_net
 
   cron:
-    build:
-      context: ./nextcloud_build
-      dockerfile: Dockerfile
-    image: nextcloud-ocr:33.0.3
+    image: nextcloud:33.0.3
     container_name: nextcloud_cron
     restart: always
     depends_on:
@@ -149,6 +143,19 @@ services:
     ports:
       - "3478:3478"
       - "3478:3478/udp"
+    networks:
+      - nextcloud_net
+
+  nextcloud-appapi-dsp:
+    image: ghcr.io/nextcloud/nextcloud-appapi-dsp:release
+    container_name: docker-socket-proxy
+    hostname: nextcloud-appapi-dsp
+    restart: always
+    privileged: true
+    environment:
+      - NC_HAPROXY_PASSWORD=${APPAPI_PROXY_PASSWORD}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - nextcloud_net
 

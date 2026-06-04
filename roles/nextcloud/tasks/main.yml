@@ -33,19 +33,6 @@
     mode: '0600'
   changed_when: false
 
-- name: Crear directorio para build de custom Nextcloud
-  file:
-    path: "{{ nextcloud_base_dir }}/nextcloud_build"
-    state: directory
-    mode: '0755'
-
-- name: Crear Dockerfile para custom Nextcloud (con OCR)
-  copy:
-    dest: "{{ nextcloud_base_dir }}/nextcloud_build/Dockerfile"
-    content: |
-      FROM nextcloud:33.0.3
-      RUN apt-get update && apt-get install -y ocrmypdf tesseract-ocr-eng tesseract-ocr-spa && rm -rf /var/lib/apt/lists/*
-
 - name: Copiar archivo .env para docker-compose
   template:
     src: .env.j2

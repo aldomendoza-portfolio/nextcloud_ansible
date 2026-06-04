@@ -47,4 +47,7 @@ Este repositorio contiene las configuraciones necesarias de Ansible para despleg
 
 4. Para configurar **Nextcloud Talk**, ve a Ajustes > Talk, en el servidor STUN/TURN, añade la IP `<TU_IP_PUBLICA>:3478`, con protocolo UDP y TCP, e introduce el secreto definido en `turn_secret`.
 
-5. Para usar el procesamiento de documentos por texto (**Workflow OCR**), entra a la sección de aplicaciones (Apps) en Nextcloud, busca e instala "Workflow OCR". El motor `ocrmypdf` ya viene integrado de forma nativa en la imagen de Nextcloud que acabas de desplegar. Finalmente, ve a Ajustes > Flujo (Flow) y crea tus reglas (por ejemplo: procesar al asignar una etiqueta a un PDF).
+5. Para usar el procesamiento de documentos por texto (**Workflow OCR**), primero debes instalar la app **AppAPI** desde la tienda de aplicaciones de Nextcloud. 
+   - Ve a Ajustes > AppAPI, y añade un "Deploy Daemon" (Docker Socket Proxy). Usa como Host `nextcloud-appapi-dsp`, puerto `2375`, y la contraseña definida en `appapi_proxy_password`.
+   - Luego instala el backend de OCR desde la tienda de aplicaciones externas (ExApps) buscando "Workflow OCR Backend".
+   - Finalmente, instala la app "Workflow OCR" normal, ve a Ajustes > Flujo (Flow) y crea tus reglas de procesamiento OCR.
