@@ -121,6 +121,7 @@ services:
       - JWT_ENABLED=true
       - ALLOW_PRIVATE_IP_ADDRESS=true
       - JWT_HEADER=AuthorizationJwt
+      - JWT_SECRET=${ONLYOFFICE_JWT_SECRET}
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
