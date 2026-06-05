@@ -118,6 +118,7 @@ services:
       - "${ONLYOFFICE_DOMAIN}:host-gateway"
     environment:
       - JWT_ENABLED=false
+      - ALLOW_PRIVATE_IP_ADDRESS=true
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=web"
