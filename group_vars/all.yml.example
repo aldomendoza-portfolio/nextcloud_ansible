@@ -22,3 +22,7 @@ nextcloud_admin_password: "CAMBIAR_ESTA_CONTRASENA"
 onlyoffice_jwt_secret: "CAMBIAR_ESTA_CONTRASENA"
 turn_secret: "CAMBIAR_ESTA_CONTRASENA"
 appapi_proxy_password: "CAMBIAR_ESTA_CONTRASENA"
+
+# Configuración de Mailcow
+mailcow_domain: "mailcow.tu_dominio.com"
+mailcow_timezone: "America/Mexico_City"

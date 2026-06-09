@@ -22,3 +22,7 @@ nextcloud_admin_password: "NextcloudAdmin_Secr3tPassword!"
 onlyoffice_jwt_secret: "OnlyOffice_Secr3tJWT!"
 turn_secret: "Coturn_Secr3tPassword!"
 appapi_proxy_password: "AppApiProxy_Secr3tPassword!"
+
+# Configuración de Mailcow
+mailcow_domain: "mailcow.asesoresti.site"
+mailcow_timezone: "America/Mexico_City"

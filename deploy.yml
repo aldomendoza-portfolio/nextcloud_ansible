@@ -16,3 +16,6 @@
       
     - role: nextcloud
       tags: ['nextcloud']
+      
+    - role: mailcow
+      tags: ['mailcow']

@@ -1,0 +1,68 @@
+---
+- name: Instalar git si no está presente
+  apt:
+    name: git
+    state: present
+
+- name: Clonar repositorio de mailcow-dockerized
+  git:
+    repo: https://github.com/mailcow/mailcow-dockerized
+    dest: /opt/mailcow
+    version: master
+
+- name: Verificar si mailcow.conf ya existe
+  stat:
+    path: /opt/mailcow/mailcow.conf
+  register: mailcow_conf
+
+- name: Generar mailcow.conf de forma desatendida
+  shell: |
+    cat <<EOF | ./generate_config.sh
+    {{ mailcow_domain }}
+    {{ mailcow_timezone }}
+    1
+    EOF
+  args:
+    chdir: /opt/mailcow
+  when: not mailcow_conf.stat.exists
+
+- name: Modificar mailcow.conf para trabajar detrás de Traefik (HTTP_PORT)
+  lineinfile:
+    path: /opt/mailcow/mailcow.conf
+    regexp: "^HTTP_PORT="
+    line: "HTTP_PORT=8080"
+
+- name: Modificar mailcow.conf para trabajar detrás de Traefik (HTTP_BIND)
+  lineinfile:
+    path: /opt/mailcow/mailcow.conf
+    regexp: "^HTTP_BIND="
+    line: "HTTP_BIND=127.0.0.1"
+
+- name: Modificar mailcow.conf para trabajar detrás de Traefik (HTTPS_PORT)
+  lineinfile:
+    path: /opt/mailcow/mailcow.conf
+    regexp: "^HTTPS_PORT="
+    line: "HTTPS_PORT=8443"
+
+- name: Modificar mailcow.conf para trabajar detrás de Traefik (HTTPS_BIND)
+  lineinfile:
+    path: /opt/mailcow/mailcow.conf
+    regexp: "^HTTPS_BIND="
+    line: "HTTPS_BIND=127.0.0.1"
+
+- name: Modificar mailcow.conf para trabajar detrás de Traefik (SKIP_LETS_ENCRYPT)
+  lineinfile:
+    path: /opt/mailcow/mailcow.conf
+    regexp: "^SKIP_LETS_ENCRYPT="
+    line: "SKIP_LETS_ENCRYPT=y"
+
+- name: Copiar docker-compose.override.yml
+  template:
+    src: docker-compose.override.yml.j2
+    dest: /opt/mailcow/docker-compose.override.yml
+
+- name: Levantar stack de Mailcow con Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/mailcow
+    state: present
+    pull: always
