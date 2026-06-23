@@ -8,5 +8,4 @@ ssh_keys/
 # Entornos virtuales o configuraciones temporales
 .ansible/
 .env
-group_vars/all.yml  
- 
+group_vars/all.yml

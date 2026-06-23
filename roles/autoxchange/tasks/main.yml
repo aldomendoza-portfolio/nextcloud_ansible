@@ -1,0 +1,17 @@
+---
+- name: Crear directorio base para AutoXchange
+  file:
+    path: /opt/autoxchange
+    state: directory
+    mode: '0755'
+
+- name: Copiar docker-compose.yml de AutoXchange
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/autoxchange/docker-compose.yml
+
+- name: Levantar stack de AutoXchange con Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/autoxchange
+    state: present
+    pull: always

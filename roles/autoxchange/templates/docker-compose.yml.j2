@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  cadviewer-server:
+    image: cadviewer/cadviewer-conversion-server:latest
+    container_name: cadviewer_server
+    restart: always
+    environment:
+      - CV_URL=https://{{ autoxchange_domain }}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.cadviewer.rule=Host(`{{ autoxchange_domain }}`)"
+      - "traefik.http.routers.cadviewer.entrypoints=websecure"
+      - "traefik.http.routers.cadviewer.tls.certresolver=myresolver"
+      - "traefik.http.middlewares.cad-cors.headers.accessControlAllowMethods=GET,POST,OPTIONS"
+      - "traefik.http.middlewares.cad-cors.headers.accessControlAllowOriginList=https://{{ domain }}"
+      - "traefik.http.routers.cadviewer.middlewares=cad-cors"
+    networks:
+      - web
+      - nextcloud_net
+
+networks:
+  web:
+    external: true
+  nextcloud_net:
+    external: true
+    name: nextcloud_nextcloud_net

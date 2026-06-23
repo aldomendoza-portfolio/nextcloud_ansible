@@ -49,3 +49,7 @@
     project_src: "{{ nextcloud_base_dir }}"
     state: present
     pull: always
+
+- name: Habilitar soporte para SVG (Requerido por CADViewer)
+  command: docker exec -u www-data nextcloud_app php occ config:system:set enable_svg --value=true --type=boolean
+  ignore_errors: yes
