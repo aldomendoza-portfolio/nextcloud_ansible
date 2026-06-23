@@ -5,6 +5,17 @@
     state: directory
     mode: '0755'
 
+- name: Instalar git si no está presente
+  apt:
+    name: git
+    state: present
+
+- name: Clonar repositorio oficial de cadviewer-conversion-server
+  git:
+    repo: https://github.com/CADViewer/cadviewer-conversion-server.git
+    dest: /opt/autoxchange
+    update: yes
+
 - name: Copiar docker-compose.yml de AutoXchange
   template:
     src: docker-compose.yml.j2
