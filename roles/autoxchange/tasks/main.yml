@@ -1,9 +1,4 @@
 ---
-- name: Crear directorio base para AutoXchange
-  file:
-    path: /opt/autoxchange
-    state: directory
-    mode: '0755'
 
 - name: Instalar git si no está presente
   apt:
@@ -15,6 +10,7 @@
     repo: https://github.com/CADViewer/cadviewer-conversion-server.git
     dest: /opt/autoxchange
     update: yes
+    force: yes
 
 - name: Copiar docker-compose.yml de AutoXchange
   template:
