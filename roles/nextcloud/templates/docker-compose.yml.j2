@@ -73,6 +73,14 @@ services:
       - OVERWRITEPROTOCOL=https
       - OVERWRITECLIURL=https://${DOMAIN}
       - OVERWRITEHOST=${DOMAIN}
+      - OBJECTSTORE_S3_BUCKET=${S3_BUCKET}
+      - OBJECTSTORE_S3_KEY=${S3_KEY}
+      - OBJECTSTORE_S3_SECRET=${S3_SECRET}
+      - OBJECTSTORE_S3_REGION=${S3_REGION}
+      - OBJECTSTORE_S3_HOST=${S3_ENDPOINT}
+      - OBJECTSTORE_S3_SSL=true
+      - OBJECTSTORE_S3_USEPATH_STYLE=${S3_USE_PATH_STYLE}
+      - OBJECTSTORE_S3_AUTOCREATE=false
     volumes:
       - ${NEXTCLOUD_DATA_DIR}:/var/www/html/data
       - ./nextcloud:/var/www/html

@@ -24,3 +24,10 @@ onlyoffice_jwt_secret: "OnlyOffice_Secr3tJWT!"
 turn_secret: "Coturn_Secr3tPassword!"
 appapi_proxy_password: "AppApiProxy_Secr3tPassword!"
 
+# Configuración de Almacenamiento S3 (OpenStack)
+s3_bucket: "nextcloud-bucket"
+s3_key: "TU_ACCESS_KEY"
+s3_secret: "TU_SECRET_KEY"
+s3_region: "us-east-1"
+s3_endpoint: "s3.openstack.tuservidor.com"
+s3_use_path_style: "true"
